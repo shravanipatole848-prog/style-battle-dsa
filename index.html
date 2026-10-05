@@ -1,1 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Style Battle - DSA Game</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #12051f, #24103d, #0f172a);
+      color: white;
+      min-height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      padding: 25px 15px;
+      background: rgba(0,0,0,0.35);
+      border-bottom: 1px solid #4c1d95;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 34px;
+      color: #f0abfc;
+    }
+
+    header p {
+      color: #c4b5fd;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 25px;
+    }
+
+    .game-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 20px;
+    }
+
+    .card {
+      background: rgba(30, 27, 50, 0.9);
+      border: 1px solid #4c1d95;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    h2 {
+      color: #e879f9;
+      margin-top: 0;
+    }
+
+    h3 {
+      color: #c4b5fd;
+    }
+
+    select,
+    button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      margin-top: 8px;
+      font-size: 15px;
+    }
+
+    select {
+      background: #312e81;
+      color: white;
+    }
+
+    button {
+      background: #a855f7;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #9333ea;
+    }
+
+    .secondary {
+      background: #374151;
+    }
+
+    .danger {
+      background: #dc2626;
+    }
+
+    .theme {
+      text-align: center;
+      background: linear-gradient(135deg, #7e22ce, #db2777);
+      padding: 18px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
+
+    .theme h2 {
+      color: white;
+      margin: 0;
+    }
+
+    .items {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .item {
+      padding: 15px;
+      background: #272343;
+      border-radius: 12px;
+      text-align: center;
+      border: 1px solid #4338ca;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .item:hover {
+      transform: translateY(-3px);
+      border-color: #e879f9;
+    }
+
+    .item.selected {
+      background: #581c87;
+      border: 2px solid #f0abfc;
+    }
+
+    .emoji {
+      font-size: 38px;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .outfit {
+      min-height: 150px;
+      border: 2px dashed #6d28d9;
+      border-radius: 15px;
+      padding: 15px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .outfit-item {
+      text-align: center;
+      background: #312e81;
+      padding: 12px;
+      border-radius: 10px;
+      min-width: 90px;
+    }
+
+    .score {
+      text-align: center;
+      font-size: 42px;
+      color: #f0abfc;
+      font-weight: bold;
+      margin: 15px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .stat {
+      background: #1e1b4b;
+      padding: 12px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .stat strong {
+      display: block;
+      color: #f0abfc;
+      font-size: 20px;
+    }
+
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    ol {
+      padding-left: 25px;
+    }
+
+    li {
+      margin: 8px 0;
+      color: #ddd6fe;
+    }
+
+    .message {
+      padding: 12px;
+      background: #064e3b;
+      border-radius: 10px;
+      margin-top: 15px;
+      color: #bbf7d0;
+    }
+
+    .dsa-box {
+      margin-top: 15px;
+      background: #111827;
+      border-radius: 12px;
+      padding: 15px;
+      font-family: monospace;
+      color: #86efac;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 850px) {
+      .game-grid,
+      .bottom-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>👗 STYLE BATTLE ⚔️</h1>
+  <p>Fashion Game powered by Data Structures & Algorithms</p>
+</header>
+
+<div class="container">
+
+  <div class="theme">
+    <h2>🔥 Today's Theme: Street Fashion</h2>
+    <p>Create the best outfit and defeat the AI!</p>
+  </div>
+
+  <div class="game-grid">
+
+    <!-- CLOTHING -->
+    <div class="card">
+
+      <h2>👕 Clothing Collection</h2>
+
+      <p>Select items for your outfit:</p>
+
+      <div class="items" id="itemsContainer"></div>
+
+      <button onclick="suggestBestOutfit()">
+        🤖 Suggest Best Outfit
+      </button>
+
+      <button class="secondary" onclick="undoLast()">
+        ↩️ Undo Last Selection
+      </button>
+
+      <button class="danger" onclick="clearOutfit()">
+        🗑️ Clear Outfit
+      </button>
+
+    </div>
+
+    <!-- OUTFIT -->
+    <div class="card">
+
+      <h2>✨ Your Outfit</h2>
+
+      <div class="outfit" id="outfitContainer">
+        <p>Select some clothes!</p>
+      </div>
+
+      <div class="score" id="score">
+        0
+      </div>
+
+      <p style="text-align:center;">
+        Your Style Score
+      </p>
+
+      <button onclick="battle()">
+        ⚔️ BATTLE AI
+      </button>
+
+      <div id="message"></div>
+
+      <div class="stats">
+
+        <div class="stat">
+          <strong id="itemCount">0</strong>
+          Items
+        </div>
+
+        <div class="stat">
+          <strong id="compatibility">0%</strong>
+          Compatibility
+        </div>
+
+        <div class="stat">
+          <strong id="rarity">0</strong>
+          Rarity
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="bottom-grid">
+
+    <!-- LEADERBOARD -->
+    <div class="card">
+
+      <h2>🏆 Leaderboard</h2>
+
+      <ol id="leaderboard"></ol>
+
+    </div>
+
+    <!-- DSA -->
+    <div class="card">
+
+      <h2>🧠 DSA Used</h2>
+
+      <div class="dsa-box">
+
+        HashMap → Clothing Database<br>
+        Array → Current Outfit<br>
+        Stack → Undo Feature<br>
+        Queue → Battle Queue<br>
+        Graph → Compatibility<br>
+        Max Heap → Best Outfit<br>
+        Sorting → Leaderboard
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+/* =====================================================
+   1. HASHMAP
+   Clothing database using JavaScript Map
+   ===================================================== */
+
+const clothes = new Map([
+
+  ["jacket", {
+    name: "Black Jacket",
+    emoji: "🧥",
+    type: "top",
+    color: "black",
+    style: "street",
+    rarity: 9
+  }],
+
+  ["hoodie", {
+    name: "Purple Hoodie",
+    emoji: "👚",
+    type: "top",
+    color: "purple",
+    style: "street",
+    rarity: 8
+  }],
+
+  ["tshirt", {
+    name: "White T-Shirt",
+    emoji: "👕",
+    type: "top",
+    color: "white",
+    style: "casual",
+    rarity: 5
+  }],
+
+  ["jeans", {
+    name: "Blue Jeans",
+    emoji: "👖",
+    type: "bottom",
+    color: "blue",
+    style: "casual",
+    rarity: 6
+  }],
+
+  ["cargo", {
+    name: "Cargo Pants",
+    emoji: "👖",
+    type: "bottom",
+    color: "green",
+    style: "street",
+    rarity: 8
+  }],
+
+  ["sneakers", {
+    name: "White Sneakers",
+    emoji: "👟",
+    type: "shoes",
+    color: "white",
+    style: "street",
+    rarity: 7
+  }],
+
+  ["boots", {
+    name: "Black Boots",
+    emoji: "🥾",
+    type: "shoes",
+    color: "black",
+    style: "street",
+    rarity: 9
+  }],
+
+  ["cap", {
+    name: "Street Cap",
+    emoji: "🧢",
+    type: "accessory",
+    color: "black",
+    style: "street",
+    rarity: 6
+  }],
+
+  ["glasses", {
+    name: "Cool Glasses",
+    emoji: "🕶️",
+    type: "accessory",
+    color: "black",
+    style: "street",
+    rarity: 7
+  }]
+
+]);
+
+
+/* =====================================================
+   2. ARRAY
+   Current player outfit
+   ===================================================== */
+
+let outfit = [];
+
+
+/* =====================================================
+   3. STACK
+   Used for Undo
+   ===================================================== */
+
+let undoStack = [];
+
+
+/* =====================================================
+   4. QUEUE
+   Battle queue
+   ===================================================== */
+
+let battleQueue = [
+  "Player",
+  "AI"
+];
+
+
+/* =====================================================
+   5. GRAPH
+   Clothing compatibility graph
+   ===================================================== */
+
+const compatibilityGraph = {
+
+  jacket: ["jeans", "cargo", "boots", "cap", "glasses"],
+
+  hoodie: ["cargo", "jeans", "sneakers", "cap"],
+
+  tshirt: ["jeans", "cargo", "sneakers", "cap"],
+
+  jeans: ["jacket", "hoodie", "tshirt", "sneakers", "boots"],
+
+  cargo: ["jacket", "hoodie", "tshirt", "sneakers", "boots", "cap"],
+
+  sneakers: ["hoodie", "tshirt", "jeans", "cargo", "cap"],
+
+  boots: ["jacket", "jeans", "cargo"],
+
+  cap: ["jacket", "hoodie", "tshirt", "cargo", "sneakers"],
+
+  glasses: ["jacket", "hoodie", "tshirt", "cap"]
+
+};
+
+
+/* =====================================================
+   DISPLAY CLOTHES
+   ===================================================== */
+
+function displayClothes() {
+
+  const container =
+    document.getElementById("itemsContainer");
+
+  container.innerHTML = "";
+
+  clothes.forEach((item, key) => {
+
+    const div = document.createElement("div");
+
+    div.className =
+      "item " +
+      (outfit.includes(key) ? "selected" : "");
+
+    div.innerHTML = `
+      <span class="emoji">${item.emoji}</span>
+      <strong>${item.name}</strong>
+      <br>
+      ⭐ ${item.rarity}
+    `;
+
+    div.onclick = () =>
+      selectItem(key);
+
+    container.appendChild(div);
+
+  });
+
+}
+
+
+/* =====================================================
+   SELECT ITEM
+   ===================================================== */
+
+function selectItem(key) {
+
+  if (outfit.includes(key)) {
+    return;
+  }
+
+  // Save previous state into STACK
+  undoStack.push([...outfit]);
+
+  // Add item to ARRAY
+  outfit.push(key);
+
+  updateUI();
+}
+
+
+/* =====================================================
+   STACK - UNDO
+   ===================================================== */
+
+function undoLast() {
+
+  if (undoStack.length === 0) {
+
+    showMessage("Nothing to undo!");
+
+    return;
+  }
+
+  outfit = undoStack.pop();
+
+  updateUI();
+
+}
+
+
+/* =====================================================
+   CLEAR OUTFIT
+   ===================================================== */
+
+function clearOutfit() {
+
+  undoStack.push([...outfit]);
+
+  outfit = [];
+
+  updateUI();
+
+}
+
+
+/* =====================================================
+   GRAPH - COMPATIBILITY
+   ===================================================== */
+
+function calculateCompatibility() {
+
+  if (outfit.length < 2) {
+    return 100;
+  }
+
+  let total = 0;
+  let pairs = 0;
+
+  for (let i = 0; i < outfit.length; i++) {
+
+    for (let j = i + 1; j < outfit.length; j++) {
+
+      pairs++;
+
+      const a = outfit[i];
+      const b = outfit[j];
+
+      if (
+        compatibilityGraph[a]?.includes(b) ||
+        compatibilityGraph[b]?.includes(a)
+      ) {
+        total++;
+      }
+
+    }
+
+  }
+
+  return Math.round((total / pairs) * 100);
+}
+
+
+/* =====================================================
+   SCORE
+   ===================================================== */
+
+function calculateScore() {
+
+  if (outfit.length === 0) {
+    return 0;
+  }
+
+  let rarity = 0;
+
+  outfit.forEach(key => {
+    rarity += clothes.get(key).rarity;
+  });
+
+  const compatibility =
+    calculateCompatibility();
+
+  const themeMatch =
+    outfit.filter(key =>
+      clothes.get(key).style === "street"
+    ).length;
+
+  const score =
+    (compatibility * 0.4) +
+    (rarity * 2) +
+    (themeMatch * 8);
+
+  return Math.min(100, Math.round(score));
+}
+
+
+/* =====================================================
+   MAX HEAP
+   Best Outfit Suggestion
+   ===================================================== */
+
+class MaxHeap {
+
+  constructor() {
+    this.heap = [];
+  }
+
+  insert(item) {
+
+    this.heap.push(item);
+
+    let index =
+      this.heap.length - 1;
+
+    while (index > 0) {
+
+      let parent =
+        Math.floor((index - 1) / 2);
+
+      if (
+        this.heap[parent].score >=
+        this.heap[index].score
+      ) {
+        break;
+      }
+
+      [
+        this.heap[parent],
+        this.heap[index]
+      ] =
+      [
+        this.heap[index],
+        this.heap[parent]
+      ];
+
+      index = parent;
+    }
+
+  }
+
+  extractMax() {
+
+    if (this.heap.length === 0) {
+      return null;
+    }
+
+    const max = this.heap[0];
+
+    const last = this.heap.pop();
+
+    if (this.heap.length > 0) {
+
+      this.heap[0] = last;
+
+      let index = 0;
+
+      while (true) {
+
+        let left = index * 2 + 1;
+        let right = index * 2 + 2;
+
+        let largest = index;
+
+        if (
+          left < this.heap.length &&
+          this.heap[left].score >
+          this.heap[largest].score
+        ) {
+          largest = left;
+        }
+
+        if (
+          right < this.heap.length &&
+          this.heap[right].score >
+          this.heap[largest].score
+        ) {
+          largest = right;
+        }
+
+        if (largest === index) {
+          break;
+        }
+
+        [
+          this.heap[index],
+          this.heap[largest]
+        ] =
+        [
+          this.heap[largest],
+          this.heap[index]
+        ];
+
+        index = largest;
+
+      }
+
+    }
+
+    return max;
+  }
+
+}
+
+
+/* =====================================================
+   HEAP - SUGGEST BEST OUTFIT
+   ===================================================== */
+
+function suggestBestOutfit() {
+
+  const heap = new MaxHeap();
+
+  clothes.forEach((item, key) => {
+
+    let score =
+      item.rarity * 10;
+
+    if (item.style === "street") {
+      score += 30;
+    }
+
+    heap.insert({
+      key,
+      score
+    });
+
+  });
+
+  const suggestion = [];
+
+  while (suggestion.length < 4) {
+
+    const best =
+      heap.extractMax();
+
+    if (!best) break;
+
+    const item =
+      clothes.get(best.key);
+
+    const alreadyType =
+      suggestion.some(key =>
+        clothes.get(key).type === item.type
+      );
+
+    if (!alreadyType) {
+      suggestion.push(best.key);
+    }
+
+  }
+
+  undoStack.push([...outfit]);
+
+  outfit = suggestion;
+
+  updateUI();
+
+  showMessage(
+    "🤖 AI suggested your best outfit using Max Heap!"
+  );
+
+}
+
+
+/* =====================================================
+   BATTLE
+   ===================================================== */
+
+function battle() {
+
+  if (outfit.length === 0) {
+
+    showMessage(
+      "⚠️ Select some clothes first!"
+    );
+
+    return;
+  }
+
+  // Queue
+  const player =
+    battleQueue.shift();
+
+  battleQueue.push(player);
+
+  const playerScore =
+    calculateScore();
+
+  // AI score
+  const aiScore =
+    Math.floor(
+      65 + Math.random() * 30
+    );
+
+  if (playerScore >= aiScore) {
+
+    showMessage(
+      `🏆 YOU WIN! Your score: ${playerScore} | AI: ${aiScore}`
+    );
+
+    addLeaderboard(
+      "You",
+      playerScore
+    );
+
+  } else {
+
+    showMessage(
+      `😈 AI WINS! Your score: ${playerScore} | AI: ${aiScore}`
+    );
+
+    addLeaderboard(
+      "You",
+      playerScore
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   LEADERBOARD
+   SORTING
+   ===================================================== */
+
+let leaderboard = [
+
+  { name: "Fashion King", score: 95 },
+
+  { name: "Style Master", score: 89 },
+
+  { name: "Trend Setter", score: 82 }
+
+];
+
+
+function addLeaderboard(name, score) {
+
+  leaderboard.push({
+    name,
+    score
+  });
+
+  // Sorting - highest score first
+  leaderboard.sort(
+    (a, b) => b.score - a.score
+  );
+
+  leaderboard =
+    leaderboard.slice(0, 10);
+
+  displayLeaderboard();
+
+}
+
+
+/* =====================================================
+   DISPLAY LEADERBOARD
+   ===================================================== */
+
+function displayLeaderboard() {
+
+  const list =
+    document.getElementById("leaderboard");
+
+  list.innerHTML = "";
+
+  leaderboard.forEach((player, index) => {
+
+    const li =
+      document.createElement("li");
+
+    li.innerHTML =
+      `<strong>#${index + 1}</strong>
+       ${player.name}
+       — ${player.score}`;
+
+    list.appendChild(li);
+
+  });
+
+}
+
+
+/* =====================================================
+   UI UPDATE
+   ===================================================== */
+
+function updateUI() {
+
+  displayClothes();
+
+  const container =
+    document.getElementById(
+      "outfitContainer"
+    );
+
+  container.innerHTML = "";
+
+  if (outfit.length === 0) {
+
+    container.innerHTML =
+      "<p>Select some clothes!</p>";
+
+  } else {
+
+    outfit.forEach(key => {
+
+      const item =
+        clothes.get(key);
+
+      const div =
+        document.createElement("div");
+
+      div.className =
+        "outfit-item";
+
+      div.innerHTML = `
+        <span class="emoji">
+          ${item.emoji}
+        </span>
+        ${item.name}
+      `;
+
+      container.appendChild(div);
+
+    });
+
+  }
+
+  const score =
+    calculateScore();
+
+  const compatibility =
+    calculateCompatibility();
+
+  let rarity = 0;
+
+  outfit.forEach(key => {
+    rarity += clothes.get(key).rarity;
+  });
+
+  document.getElementById("score")
+    .textContent = score;
+
+  document.getElementById("itemCount")
+    .textContent = outfit.length;
+
+  document.getElementById("compatibility")
+    .textContent =
+    compatibility + "%";
+
+  document.getElementById("rarity")
+    .textContent = rarity;
+
+}
+
+
+/* =====================================================
+   MESSAGE
+   ===================================================== */
+
+function showMessage(message) {
+
+  document.getElementById("message")
+    .innerHTML =
+    `<div class="message">${message}</div>`;
+
+}
+
+
+/* =====================================================
+   INITIALIZE
+   ===================================================== */
+
+displayClothes();
+
+displayLeaderboard();
+
+updateUI();
+
+</script>
+
+</body>
+</html>
 
